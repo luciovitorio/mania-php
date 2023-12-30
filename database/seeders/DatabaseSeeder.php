@@ -12,7 +12,8 @@ class DatabaseSeeder extends Seeder
         BranchSeeder::class,
         PlanSeeder::class,
         ClientSeeder::class,
-        AddressSeeder::class
+        AddressSeeder::class,
+        ClothinSeeder::class
     ];
 
     /**
@@ -25,5 +26,6 @@ class DatabaseSeeder extends Seeder
         $this->call(PlanSeeder::class);
         $this->call(ClientSeeder::class);
         $this->call(AddressSeeder::class);
+        $this->call(ClothinSeeder::class);
     }
 }

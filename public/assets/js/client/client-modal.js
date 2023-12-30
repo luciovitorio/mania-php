@@ -14,6 +14,7 @@ $(document).ready(function () {
         $('#charCount').text(currentChars + '/' + maxChars);
     });
 
+
     // Se o checkbox estiver marcado, habilitar o input; caso contrário, desabilitar
     $('#delivery_fee').change(function () {
         $('#delivery_amount').prop('disabled', !this.checked);
@@ -93,24 +94,24 @@ $(document).ready(function () {
 
     // Função para preencher o select de filiais
     function fillBranchesSelect() {
-        $('#branch').empty();
-        $('#branch').append('<option value="">Escolha uma filial</option>');
+        $('#branch_id').empty();
+        $('#branch_id').append('<option value="">Escolha uma filial</option>');
 
         if (branchesData) {
             branchesData.forEach(function (branch) {
-                $('#branch').append('<option value="' + branch.id + '">' + branch.name + '</option>');
+                $('#branch_id').append('<option value="' + branch.id + '">' + branch.name + '</option>');
             });
         }
     }
 
     // Função para preencher o select de planos
     function fillPlansSelect() {
-        $('#plan').empty();
-        $('#plan').append('<option value="">Escolha um plano</option>');
+        $('#plan_id').empty();
+        $('#plan_id').append('<option value="">Escolha um plano</option>');
 
         if (plansData) {
             plansData.forEach(function (plan) {
-                $('#plan').append('<option value="' + plan.id + '">' + plan.name + '</option>');
+                $('#plan_id').append('<option value="' + plan.id + '">' + plan.name + '</option>');
             });
         }
     }
@@ -119,7 +120,7 @@ $(document).ready(function () {
         currentUrl = url;
         currentMethod = method;
         var rules = {
-            branch: {
+            branch_id: {
                 required: true,
             },
             name: {
@@ -128,7 +129,7 @@ $(document).ready(function () {
             email: {
                 email: true,
             },
-            plan: {
+            plan_id: {
                 required: true,
             },
             collection_frequency: {
@@ -181,10 +182,10 @@ $(document).ready(function () {
                 email: {
                     email: "Por favor, preencha com um endereço de e-mail válido",
                 },
-                branch: {
+                branch_id: {
                     required: "Por favor, preencha esse campo.",
                 },
-                plan: {
+                plan_id: {
                     required: "Por favor, preencha esse campo.",
                 },
                 collection_frequency: {
@@ -285,6 +286,11 @@ $(document).ready(function () {
         fillBranchesSelect();
         fillPlansSelect();
 
+        if (true) {
+            console.log('checked')
+            $('#delivery_amount').removeAttr('disabled');
+        }
+
         if (action === 'create') {
             $(this).find('.modal-title').text('Adicionar Cliente');
             $(this).find('#buttonText').text('Criar Cliente');
@@ -293,23 +299,26 @@ $(document).ready(function () {
 
             setupValidation(url, method);
         } else if (action === 'edit') {
-            $(this).find('.modal-title').text('Editar Usuário');
-            $(this).find('#buttonText').text('Atualizar Usuário');
-            var userId = button.data('id');
+            $(this).find('.modal-title').text('Editar Cliente');
+            $(this).find('#buttonText').text('Atualizar Cliente');
+            var clientId = button.data('id');
 
             $.ajax({
-                url: '/usuarios/' + userId,
+                url: '/clientes/' + clientId,
                 method: 'GET',
                 success: function (response) {
                     console.log(response)
-                    var profileWithLowerFirstChar = response.profile.charAt(0).toLowerCase() + response.profile.slice(1);
-                    $('#branch').val(response.branch.id);
+                    // var profileWithLowerFirstChar = response.profile.charAt(0).toLowerCase() + response.profile.slice(1);
                     $('#name').val(response.name);
+                    $('#branch_id').val(response.branch.id);
+                    $('#cep').val(response.address.cep);
                     $('#email').val(response.email);
                     $('#cpf').val(response.cpf);
+                    $('#plan_id').val(response.plan.id);
                     $('#date_of_birth').val(response.date_of_birth);
-                    $('#profile').val(profileWithLowerFirstChar);
-                    $('#percent').val(response.percent);
+                    $('#rg').val(response.rg);
+                    $('#home_phone').val(response.home_phone);
+                    $('#cell_phone').val(response.cell_phone);
                     $('#is_active').prop('checked', response.is_active);
                     $('#street').val(response.address.street);
                     $('#number').val(response.address.number);
@@ -317,6 +326,16 @@ $(document).ready(function () {
                     $('#district').val(response.address.district);
                     $('#city').val(response.address.city);
                     $('#state').val(response.address.state);
+                    $('#collection_frequency').val(response.collection_frequency);
+                    $('#collection_day').val(response.collection_day);
+                    $('#collection_time').val(response.collection_time);
+                    $('#delivery_day').val(response.delivery_day);
+                    $('#delivery_time').val(response.delivery_time);
+                    $('#collection_start').val(response.collection_start);
+                    $('#description').val(response.description);
+                    $('#delivery_fee').prop('checked', response.delivery_fee);
+                    $('#delivery_amount').val(response.delivery_amount);
+                    $('#due_date').val(response.due_date);
                 },
                 error: function (xhr, status, error) {
                     if (error) {
@@ -328,39 +347,39 @@ $(document).ready(function () {
                 }
             });
 
-            var url = '/usuarios/' + userId;
+            var url = '/clientes/' + clientId;
             var method = 'PUT';
 
             setupValidation(url, method);
         }
     });
 
-    $('#user-modal').on('hidden.bs.modal', function () {
+    $('#client-modal').on('hidden.bs.modal', function () {
         $(this).find('form')[0].reset();
         $(this).find('.text-danger').remove();
         $(this).find('.is-invalid').removeClass('is-invalid');
     });
 
-    $('.user_datatable').on('click', '.link-danger', function (event) {
+    $('.client_datatable').on('click', '.link-danger', function (event) {
         event.preventDefault();
 
-        var userId = $(this).data('id');
+        var clientId = $(this).data('id');
 
-        $('#user-modal-delete a#delete').data('userId', userId);
+        $('#client-modal-delete a#delete').data('clientId', clientId);
 
     });
 
-    $('#user-modal-delete a#delete').on('click', function (event) {
+    $('#client-modal-delete a#delete').on('click', function (event) {
         event.preventDefault();
 
-        var userId = $(this).data('userId');
+        var clientId = $(this).data('clientId');
 
-        if (userId) {
+        if (clientId) {
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url: '/usuarios/' + userId,
+                url: '/clientes/' + clientId,
                 method: 'DELETE',
                 success: function (response) {
                     if (response.success) {
@@ -368,7 +387,7 @@ $(document).ready(function () {
                             timeOut: 3000,
                             closeButton: true
                         });
-                        $('.user_datatable').DataTable().ajax.reload();
+                        $('.client_datatable').DataTable().ajax.reload();
                     }
                 },
                 error: function (xhr, status, error) {

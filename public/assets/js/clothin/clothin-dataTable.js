@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    var table = $('.client_datatable').DataTable({
+    var table = $('.clothin_datatable').DataTable({
         language: {
             paginate: {
                 first: 'Primeira',
@@ -13,44 +13,19 @@ $(document).ready(function () {
         processing: true,
         serverSide: true,
         ajax: {
-            url: '/clientes',
+            url: '/roupas',
         },
         columns: [
             {data: 'branch.name', name: 'branch.name'},
             {data: 'name', name: 'name'},
             {
-                data: 'cpf',
-                name: 'cpf',
+                data: 'type',
+                name: 'type',
                 render: function (data) {
-                    return data ? data : 'CPF não cadastrado';
-                }
-            },
-            {
-                data: null,
-                name: 'address',
-                render: function (data, type, full, meta) {
-                    var address = full.address;
-                    var formattedAddress = address.street + ' ' + address.number;
-
-                    if (address.complement) {
-                        formattedAddress += ', ' + address.complement;
-                    }
-
-                    formattedAddress += ', ' + address.district + ', ' + address.city;
-
-                    return formattedAddress;
-                }
-            },
-            {data: 'cell_phone', name: 'cell_phone'},
-            {data: 'plan.name', name: 'plan.name'},
-            {
-                data: 'is_active',
-                name: 'is_active',
-                render: function (data) {
-                    if (data) {
-                        return '<span class="badge bg-primary text-green-fg">Ativo</span>';
+                    if (data === 'EASY') {
+                        return '<span class="badge bg-success text-green-fg">Fácil</span>';
                     } else {
-                        return '<span class="badge bg-red text-red-fg">Bloqueado</span>';
+                        return '<span class="badge bg-red text-red-fg">Dfícil</span>';
                     }
                 }
             },

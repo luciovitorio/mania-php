@@ -4,10 +4,10 @@
 
 @section('content')
 
-    @include('layout-dashboard.page-header', ['page' => 'Clientes', 'btnText' => 'Cadastrar Cliente', 'modalName' => 'client-modal'])
+    @include('layout-dashboard.page-header', ['page' => 'Roupas', 'btnText' => 'Cadastrar Roupa', 'modalName' => 'clothin-modal'])
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Clientes</h3>
+            <h3 class="card-title">Roupas</h3>
         </div>
         <div class="card-body border-bottom py-3">
             <div class="d-flex">
@@ -37,16 +37,12 @@
             </div>
         </div>
         <div class="table-responsive">
-            <table class="table card-table  table-striped table-hover text-nowrap client_datatable">
+            <table class="table card-table  table-striped table-hover text-nowrap clothin_datatable">
                 <thead>
                 <tr>
                     <th>Filial</th>
                     <th>Nome</th>
-                    <th>CPF</th>
-                    <th>Endereço</th>
-                    <th>Telefone</th>
-                    <th>Plano</th>
-                    <th>Situação</th>
+                    <th>Tipo</th>
                     <th>Ações</th>
                 </tr>
                 </thead>
@@ -56,8 +52,8 @@
         </div>
     </div>
     {{--    MODAL --}}
-    @include('client.client-modal')
-    @include('client.client-modal-delete')
+    @include('clothin.clothin-modal')
+    @include('clothin.clothin-modal-delete')
 @endsection
 @section('js')
     <script
@@ -67,13 +63,10 @@
         src="{{asset('assets/js/jquery.validate.min.js')}}"
         defer></script>
     <script
-        src="{{asset('assets/js/client/client-dataTable.js')}}"
+        src="{{asset('assets/js/clothin/clothin-dataTable.js')}}"
         defer></script>
     <script
-        src="{{asset('assets/js/client/client-modal.js')}}"
-        defer></script>
-    <script
-        src="{{asset('assets/js/client/client-form-mask.js')}}"
+        src="{{asset('assets/js/clothin/clothin-modal.js')}}"
         defer></script>
 @endsection
 @section('css')

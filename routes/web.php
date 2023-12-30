@@ -7,6 +7,7 @@ use App\Http\Controllers\BranchController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\ClothController;
 
 Route::get('/', [DashboardController::class, 'index'])->middleware('auth')->name('dashboard');
 
@@ -56,9 +57,22 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('clientes')->group(function () {
         Route::get('/', [ClientController::class, 'index'])->name('client.index');
         Route::post('/', [ClientController::class, 'create'])->name('client.store');
-//        Route::get('{plan}', [PlanController::class, 'show'])->name('plan.show');
-//        Route::put('{plan}', [PlanController::class, 'update'])->name('plan.update');
-//        Route::delete('{plan}', [PlanController::class, 'delete'])->name('plan.destroy');
+        Route::get('{client}', [ClientController::class, 'show'])->name('client.show');
+        Route::put('{client}', [ClientController::class, 'update'])->name('client.update');
+        Route::delete('{client}', [ClientController::class, 'destroy'])->name('client.destroy');
+    });
+});
+
+/*
+ * ROTAS DE ROUPAS
+ * */
+Route::middleware(['auth'])->group(function () {
+    Route::prefix('roupas')->group(function () {
+        Route::get('/', [ClothController::class, 'index'])->name('clothin.index');
+        Route::post('/', [ClothController::class, 'create'])->name('clothin.store');
+        Route::get('{clothin}', [ClothController::class, 'show'])->name('clothin.show');
+        Route::put('{clothin}', [ClothController::class, 'update'])->name('clothin.update');
+        Route::delete('{clothin}', [ClothController::class, 'destroy'])->name('clothin.destroy');
     });
 });
 

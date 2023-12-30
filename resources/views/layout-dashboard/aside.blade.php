@@ -76,6 +76,18 @@
                 <li class="nav-item">
                     <a
                         class="nav-link"
+                        href="./">
+                  <span class="nav-link-icon d-md-none d-lg-inline-block">
+                    @include('icons.checkup-icon')
+                  </span>
+                        <span class="nav-link-title">
+                    Gerar e-Rol
+                  </span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a
+                        class="nav-link"
                         href="{{ route('client.index') }}"
                     >
                       <span class="nav-link-icon d-md-none d-lg-inline-block">
@@ -85,6 +97,74 @@
                             Clientes
                         </span>
                     </a>
+                </li>
+                <li class="nav-item">
+                    <a
+                        class="nav-link"
+                        href="{{ route('client.index') }}"
+                    >
+                      <span class="nav-link-icon d-md-none d-lg-inline-block">
+                        @include('icons.package-icon')
+                      </span>
+                        <span class="nav-link-title">
+                            Operação
+                        </span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a
+                        class="nav-link"
+                        href="{{ route('client.index') }}"
+                    >
+                      <span class="nav-link-icon d-md-none d-lg-inline-block">
+                        @include('icons.truck-icon')
+                      </span>
+                        <span class="nav-link-title">
+                            Entregas/Coleta
+                        </span>
+                    </a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a
+                        class="nav-link dropdown-toggle"
+                        href="#navbar-help"
+                        data-bs-toggle="dropdown"
+                        data-bs-auto-close="false"
+                        role="button"
+                        aria-expanded="false">
+                  <span class="nav-link-icon d-md-none d-lg-inline-block">
+                      @include('icons.money-icon')
+                  </span>
+                        <span class="nav-link-title">
+                    Financeiro
+                  </span>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a
+                            class="dropdown-item"
+                            href="{{ route('clothin.index') }}"
+                        >
+                            - Gerar fechamento
+                        </a>
+                        <a
+                            class="dropdown-item"
+                            href="{{ route('clothin.index') }}"
+                        >
+                            - Extrato de fechamento
+                        </a>
+                        <a
+                            class="dropdown-item"
+                            href="{{ route('clothin.index') }}"
+                        >
+                            - Lista de fechamento
+                        </a>
+                        <a
+                            class="dropdown-item"
+                            href="{{ route('clothin.index') }}"
+                        >
+                            - Extrato de produção
+                        </a>
+                    </div>
                 </li>
                 <li class="nav-item">
                     <a
@@ -131,70 +211,19 @@
                         data-bs-auto-close="false"
                         role="button"
                         aria-expanded="false">
-                  <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/lifebuoy -->
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="icon"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        stroke-width="2"
-                        stroke="currentColor"
-                        fill="none"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"><path
-                            stroke="none"
-                            d="M0 0h24v24H0z"
-                            fill="none"/><path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/><path d="M15 15l3.35 3.35"/><path d="M9 15l-3.35 3.35"/><path d="M5.65 5.65l3.35 3.35"/><path d="M18.35 5.65l-3.35 3.35"/></svg>
+                  <span class="nav-link-icon d-md-none d-lg-inline-block">
+                      @include('icons.settings-icon')
                   </span>
                         <span class="nav-link-title">
-                    Help
+                    Configurações
                   </span>
                     </a>
                     <div class="dropdown-menu">
                         <a
                             class="dropdown-item"
-                            href="https://tabler.io/docs"
-                            target="_blank"
-                            rel="noopener">
-                            Documentation
-                        </a>
-                        <a
-                            class="dropdown-item"
-                            href="./changelog.html">
-                            Changelog
-                        </a>
-                        <a
-                            class="dropdown-item"
-                            href="https://github.com/tabler/tabler"
-                            target="_blank"
-                            rel="noopener">
-                            Source code
-                        </a>
-                        <a
-                            class="dropdown-item text-pink"
-                            href="https://github.com/sponsors/codecalm"
-                            target="_blank"
-                            rel="noopener">
-                            <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="icon icon-inline me-1"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                stroke-width="2"
-                                stroke="currentColor"
-                                fill="none"
-                                stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <path
-                                    stroke="none"
-                                    d="M0 0h24v24H0z"
-                                    fill="none"/>
-                                <path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"/>
-                            </svg>
-                            Sponsor project!
+                            href="{{ route('clothin.index') }}"
+                        >
+                            - Roupas
                         </a>
                     </div>
                 </li>

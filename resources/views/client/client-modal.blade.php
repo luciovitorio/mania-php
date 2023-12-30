@@ -40,13 +40,13 @@
                             <div class="mb-3">
                                 <label
                                     class="form-label"
-                                    for="branch">
+                                    for="branch_id">
                                     Filial
                                 </label>
                                 <select
                                     class="form-select"
-                                    name="branch"
-                                    id="branch"
+                                    name="branch_id"
+                                    id="branch_id"
                                 >
                                 </select>
                             </div>
@@ -98,13 +98,13 @@
                             <div class="mb-3">
                                 <label
                                     class="form-label"
-                                    for="plan">
+                                    for="plan_id">
                                     Selecione um plano
                                 </label>
                                 <select
                                     class="form-select"
-                                    name="plan"
-                                    id="plan"
+                                    name="plan_id"
+                                    id="plan_id"
                                 >
                                 </select>
                             </div>
@@ -142,14 +142,14 @@
                             <div class="mb-3">
                                 <label
                                     class="form-label"
-                                    for="home-phone">
+                                    for="home_phone">
                                     Telefone Residencial
                                 </label>
                                 <input
                                     type="text"
-                                    class="form-control"
-                                    name="home-phone"
-                                    id="home-phone"
+                                    class="form-control mask-home-phone"
+                                    name="home_phone"
+                                    id="home_phone"
                                 >
                             </div>
                         </div>
@@ -157,14 +157,14 @@
                             <div class="mb-3">
                                 <label
                                     class="form-label"
-                                    for="cell-phone">
+                                    for="cell_phone">
                                     Telefone Celular
                                 </label>
                                 <input
                                     type="text"
-                                    class="form-control"
-                                    name="cell-phone"
-                                    id="cell-phone"
+                                    class="form-control mask-cell-phone"
+                                    name="cell_phone"
+                                    id="cell_phone"
                                 >
                             </div>
                         </div>
@@ -453,7 +453,7 @@
                                 </label>
                                 <input
                                     type="text"
-                                    class="form-control bg-gray-600"
+                                    class="form-control bg-gray-600 mask-money"
                                     name="delivery_amount"
                                     id="delivery_amount"
                                     disabled

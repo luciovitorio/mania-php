@@ -37,8 +37,8 @@ class Client extends Model
     protected function cpf(): Attribute
     {
         return Attribute::make(
-            get: function (string $value) {
-                if (strlen($value) === 11) {
+            get: function ($value) {
+                if ($value !== null && strlen($value) === 11) {
                     return substr($value, 0, 3) . '.' . substr($value, 3, 3) . '.' . substr(
                             $value,
                             6,
@@ -50,7 +50,37 @@ class Client extends Model
         );
     }
 
+    protected function deliveryAmount(): Attribute
+    {
+        return Attribute::make(
+            get: function ($value) {
+                if ($value !== null) {
+                    return number_format($value, 2, ',', '');
+                }
+                return null;
+            },
+            set: function ($value) {
+                if ($value !== null) {
+                    return number_format(
+                        (float)str_replace(',', '.', str_replace('.', '', $value)),
+                        2,
+                        '.',
+                        ''
+                    );
+                }
+                return null;
+            }
+        );
+    }
+
     protected function isActive(): Attribute
+    {
+        return Attribute::make(
+            set: fn(string $value) => $value == 'on' ? 1 : 0
+        );
+    }
+
+    protected function deliveryFee(): Attribute
     {
         return Attribute::make(
             set: fn(string $value) => $value == 'on' ? 1 : 0

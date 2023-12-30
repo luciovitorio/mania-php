@@ -18,7 +18,13 @@ $(document).ready(function () {
         columns: [
             {data: 'branch.name', name: 'branch.name'},
             {data: 'name', name: 'name'},
-            {data: 'email', name: 'email'},
+            {
+                data: 'email',
+                name: 'email',
+                render: function (data) {
+                    return data ? data : 'E-mail não cadastrado';
+                }
+            },
             {data: 'cpf', name: 'cpf'},
             {data: 'profile', name: 'profile'},
             {

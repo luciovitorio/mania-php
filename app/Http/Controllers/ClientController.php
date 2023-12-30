@@ -81,13 +81,26 @@ class ClientController extends Controller
             $request['is_active'] = 0;
         }
 
+        $deliveryFee = $request->input('delivery_fee');
+        if (!$deliveryFee) {
+            $request['delivery_fee'] = 0;
+        }
+
         /* Validações */
         $validated = Validator::make($request->all(), [
             'name'                 => 'required',
             'email'                => 'nullable|email|unique:clients',
-            'branch'               => 'required',
-            'plan'                 => 'required',
-            'cpf'                  => 'nullable|unique:clients',
+            'branch_id'            => 'required',
+            'plan_id'              => 'required',
+            'cpf'                  => [
+                'nullable',
+                Rule::unique('clients'),
+                function ($attribute, $value, $fail) {
+                    if (!validaCPF($value)) {
+                        $fail('Por favor, entre com um CPF válido.');
+                    }
+                },
+            ],
             'cep'                  => 'required',
             'street'               => 'required',
             'district'             => 'required',
@@ -106,11 +119,11 @@ class ClientController extends Controller
                 Rule::enum(ClientDeliveryDayEnum::class)
             ],
         ], [
-            'name.required'                 => "Por favor, entre com o nome do usuário",
+            'name.required'                 => "Por favor, entre com o nome do cliente",
             'email.email'                   => "Por favor, entre com um endereço de e-mail válido",
             'email.unique'                  => "Já existe um cliente cadastrado com esse email",
-            'branch.required'               => "Por favor, escolha uma filial",
-            'plan.required'                 => "Por favor, escolha um plano",
+            'branch_id.required'            => "Por favor, escolha uma filial",
+            'plan_id.required'              => "Por favor, escolha um plano",
             'cpf.unique'                    => "Já existe um cliente cadastrado com esse cpf",
             'collection_frequency.required' => "Por favor, escolha uma frequência",
             'collection_frequency.enum'     => "Por favor, escolha um valor válido",
@@ -148,9 +161,9 @@ class ClientController extends Controller
                 'due_date',
                 'is_active',
             ]) + [
-                'branch_id' => $request->input('branch')
+                'branch_id' => $request->input('branch_id')
             ] + [
-                'plan_id' => $request->input('plan')
+                'plan_id' => $request->input('plan_id')
             ]
         );
 
@@ -168,5 +181,164 @@ class ClientController extends Controller
         return response()->json(['success' => 'Cliente cadastrado com sucesso!']);
     }
 
+    public function show(Client $client)
+    {
+        return $client->load(['branch', 'plan', 'address']);
+    }
 
+    public function update(Request $request, Client $client)
+    {
+        $isActive = $request->input('is_active');
+        if (!$isActive) {
+            $request['is_active'] = 0;
+        }
+
+        $deliveryFee = $request->input('delivery_fee');
+        if (!$deliveryFee) {
+            $request['delivery_fee'] = 0;
+            $request['delivery_amount'] = 0;
+        }
+
+        $request->validate([
+            'name'                 => 'required',
+            'email'                => [
+                'nullable',
+                'email',
+                Rule::unique('users')->ignore($client->id),
+            ],
+            'branch_id'            => 'required',
+            'plan_id'              => 'required',
+            'cpf'                  => [
+                'nullable',
+                Rule::unique('clients')->ignore($client->id),
+                function ($attribute, $value, $fail) {
+                    if (!validaCPF($value)) {
+                        $fail('Por favor, entre com um CPF válido.');
+                    }
+                },
+            ],
+            'cep'                  => 'required',
+            'street'               => 'required',
+            'district'             => 'required',
+            'city'                 => 'required',
+            'state'                => 'required',
+            'collection_frequency' => [
+                'required',
+                Rule::enum(ClientCollectionFrequencyEnum::class)
+            ],
+            'collection_day'       => [
+                'nullable',
+                Rule::enum(ClientCollectionDayEnum::class)
+            ],
+            'delivery_day'         => [
+                'nullable',
+                Rule::enum(ClientDeliveryDayEnum::class)
+            ],
+        ], [
+            'name.required'                 => "Por favor, entre com o nome do cliente",
+            'email.email'                   => "Por favor, entre com um endereço de e-mail válido",
+            'email.unique'                  => "Já existe um cliente cadastrado com esse email",
+            'branch_id.required'            => "Por favor, escolha uma filial",
+            'plan_id.required'              => "Por favor, escolha um plano",
+            'cpf.required'                  => "Por favor, entre com um cpf",
+            'cpf.unique'                    => "Já existe um cliente cadastrado com esse cpf",
+            'collection_frequency.required' => "Por favor, escolha uma frequência",
+            'collection_frequency.enum'     => "Por favor, escolha um valor válido",
+            'collection_day.enum'           => "Por favor, escolha um valor válido",
+            'delivery_day.enum'             => "Por favor, escolha um valor válido",
+            'cep.required'                  => "Por favor, entre com o cep da filial",
+            'street.required'               => "Por favor, entre com o nome da rua",
+            'district.required'             => "Por favor, entre com o nome do bairro",
+            'city.required'                 => "Por favor, entre com o nome da cidade",
+            'state.required'                => "Por favor, entre com o nome do estado",
+        ]);
+
+        $fillableFields = [
+            'branch_id',
+            'plan_id',
+            'name',
+            'cpf',
+            'rg',
+            'date_of_birth',
+            'email',
+            'home_phone',
+            'cell_phone',
+            'collection_frequency',
+            'collection_day',
+            'collection_time',
+            'delivery_day',
+            'delivery_time',
+            'collection_start',
+            'description',
+            'delivery_fee',
+            'delivery_amount',
+            'due_date',
+            'is_active'
+        ];
+
+        $client->fill($request->only($fillableFields));
+        $client->save();
+
+        $address = $client->address()->first();
+
+        $address->update([
+            'cep'        => $request->input('cep'),
+            'street'     => $request->input('street'),
+            'number'     => $request->input('number'),
+            'complement' => $request->input('complement'),
+            'district'   => $request->input('district'),
+            'city'       => $request->input('city'),
+            'state'      => $request->input('state')
+        ]);
+
+        return response()->json(['success' => 'Cliente atualizado com sucesso!']);
+    }
+
+    public function destroy(Client $client)
+    {
+        $client->address()->delete();
+        $client->delete();
+
+        return response()->json(['success' => 'Cliente removido com sucesso!']);
+    }
+
+}
+
+function validaCPF($cpf)
+{
+    // Remove caracteres não numéricos
+    $cpf = preg_replace('/[^0-9]/', '', $cpf);
+
+    // Verifica se o CPF tem 11 dígitos
+    if (strlen($cpf) !== 11) {
+        return false;
+    }
+
+    // Verifica se todos os dígitos são iguais
+    if (preg_match('/(\d)\1{10}/', $cpf)) {
+        return false;
+    }
+
+    // Calcula o primeiro dígito verificador
+    $sum = 0;
+    for ($i = 0; $i < 9; $i++) {
+        $sum += (10 - $i) * intval($cpf[$i]);
+    }
+    $digit1 = 11 - ($sum % 11);
+    $digit1 = ($digit1 >= 10) ? 0 : $digit1;
+
+    // Calcula o segundo dígito verificador
+    $sum = 0;
+    for ($i = 0; $i < 10; $i++) {
+        $sum += (11 - $i) * intval($cpf[$i]);
+    }
+    $digit2 = 11 - ($sum % 11);
+    $digit2 = ($digit2 >= 10) ? 0 : $digit2;
+
+    // Verifica se os dígitos verificadores estão corretos
+    if ($digit1 == intval($cpf[9]) && $digit2 == intval($cpf[10])) {
+        return true;
+    } else {
+        return false;
+    }
 }
